@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+@theme {
+  --color-shop-black: "#000000";
+  --color-shop-red: "#FF3333";
+}
+
+body {
+  font-family: "Satoshi", sans-serif;
+}
+
+/* Custom styles that extend Tailwind */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 768px) {
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
