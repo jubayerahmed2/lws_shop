@@ -1,3 +1,6 @@
+import products from "../data/products";
+import { debounce } from "../utils/debounce";
+
 export const productReducer = (prevState, action) => {
   /*
     -> Sort products - implement bubble sort algorithm
@@ -61,7 +64,25 @@ export const productReducer = (prevState, action) => {
       return result;
     }
 
+    case "SEARCH": {
+      let result = products;
+      const searchProduct = (query) => {
+        const res = products.filter((product) => {
+          return product.name.includes(query);
+        });
+
+        result = res;
+      };
+
+      debounce(searchProduct(action.query), 1000);
+
+      return {
+        ...prevState,
+        products: result,
+        query: action.query,
+      };
+    }
     default:
-      break;
+      return prevState;
   }
 };

@@ -4,7 +4,7 @@ import { calculateDiscount } from "../utils/calculate_discount";
 
 function CartItem({ productId, quantity }) {
   const dispatch = useCartDispatch();
-  const products = useProduct();
+  const { products } = useProduct();
   const productInfo = products.find((p) => p.id === productId);
 
   const { id, image, name, price, discount } = productInfo || {};

@@ -7,17 +7,19 @@ function Input({
   onChange,
   disabled,
 }) {
-  const optionalFields = [value, onChange, disabled].filter((field) => field);
   return (
     <>
       <input
         type={type}
         placeholder={placeholder}
         className={className}
-        {...optionalFields}
+        value={value}
+        onChange={onChange}
+        disabled={disabled}
       />
       {children}
     </>
   );
 }
+
 export default Input;

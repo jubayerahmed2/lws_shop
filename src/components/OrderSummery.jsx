@@ -34,7 +34,7 @@ function calculateOrder(carts, products, applyCoupon) {
 }
 
 function OrderSummery() {
-  const products = useProduct();
+  const { products } = useProduct();
   const carts = useCart();
   const [applyCoupon, setApplyCoupon] = useState(false);
   const [coupon, setCoupon] = useState("");

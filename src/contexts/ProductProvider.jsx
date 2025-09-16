@@ -1,9 +1,15 @@
 import { createContext, useContext, useReducer } from "react";
-import initialState from "../data/products";
+import products from "../data/products";
 import { productReducer } from "../reducers/productReducer";
 
 const ProductContext = createContext(null);
 const ProductDispatchContext = createContext(null);
+
+const initialState = {
+  products: products,
+  query: "",
+  error: "",
+};
 
 export default function ProductProvider({ children }) {
   const [state, dispatch] = useReducer(productReducer, initialState);

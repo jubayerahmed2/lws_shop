@@ -3,7 +3,7 @@ import Product from "./Product";
 import SortProducts from "./SortProducts";
 
 function Products() {
-  const products = useProduct();
+  const { products } = useProduct();
   return (
     <div className="lg:col-span-2">
       <div className="flex items-center justify-between mb-6">
