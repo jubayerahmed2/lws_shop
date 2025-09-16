@@ -95,8 +95,11 @@ const cartReducer = (state, action) => {
         ),
       };
     }
-    case "CLEAR": {
-      return [];
+    case "RESET": {
+      return {
+        cart_items: [],
+        error: "",
+      };
     }
 
     default:

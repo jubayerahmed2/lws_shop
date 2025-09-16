@@ -19,6 +19,12 @@ Clothes selling E-commerce single page web application build in React.js. This a
 
 ---
 
+## Project Diagram View
+
+<div>
+<img src="./src/assets/images/diagram.PNG">
+</div>
+
 ## ⚒️ Packages Installed
 
 | Packages     | Version | Usage                         |

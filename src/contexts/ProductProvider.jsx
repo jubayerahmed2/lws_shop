@@ -6,7 +6,7 @@ const ProductContext = createContext(null);
 const ProductDispatchContext = createContext(null);
 
 const initialState = {
-  products: products,
+  products,
   query: "",
   error: "",
 };

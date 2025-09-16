@@ -1,7 +1,7 @@
 import { useState } from "react";
 import CouponIcon from "../assets/icons/CouponIcon";
-import { useCart } from "../contexts/CartProvider";
-import { useProduct } from "../contexts/ProductProvider";
+import { useCart, useCartDispatch } from "../contexts/CartProvider";
+import { useProduct, useProductDispatch } from "../contexts/ProductProvider";
 import { calculateDiscount } from "../utils/calculate_discount";
 
 function calculateOrder(carts, products, applyCoupon) {
@@ -16,18 +16,22 @@ function calculateOrder(carts, products, applyCoupon) {
   carts.forEach((item) => {
     const product = products.find((p) => p.id === item.productId);
 
-    result.subtotal += product.price;
-
     const subtractedDiscount =
       product.price - calculateDiscount(product.price, product.discount);
-    result.total += subtractedDiscount;
+    result.total += subtractedDiscount * item.quantity;
+
+    result.subtotal += subtractedDiscount * item.quantity;
   });
 
   result.discountAmount = calculateDiscount(result.total, result.discount);
   result.total -= result.discountAmount;
 
   if (applyCoupon) {
-    result.total -= calculateDiscount(result.total, 20); // 20% coupon
+    result.total -= calculateDiscount(result.total, 20); // 20% on coupon
+  }
+
+  if (result.total) {
+    result.total += result.deliveryFee;
   }
 
   return result;
@@ -35,6 +39,8 @@ function calculateOrder(carts, products, applyCoupon) {
 
 function OrderSummery() {
   const { products } = useProduct();
+  const cartDispatch = useCartDispatch();
+  const productDispatch = useProductDispatch();
   const carts = useCart();
   const [applyCoupon, setApplyCoupon] = useState(false);
   const [coupon, setCoupon] = useState("");
@@ -47,6 +53,19 @@ function OrderSummery() {
     }
     setApplyCoupon(true);
     setCoupon("");
+  };
+
+  const handleCheckout = () => {
+    cartDispatch({
+      type: "RESET",
+    });
+    productDispatch({
+      type: "RESET",
+    });
+
+    alert(
+      "THANK YOU for checking out. Unfortunately, this application doesnt handling this type of actins right now"
+    );
   };
 
   let { deliveryFee, discount, subtotal, total, discountAmount } =
@@ -97,13 +116,14 @@ function OrderSummery() {
       </div>
       {error && <span className="text-red-500 text-xs">{error}</span>}
 
-      <a
-        href="#"
-        className="mt-6 block bg-black text-white text-center py-3 rounded-md hover:bg-gray-800 transition-colors"
+      <button
+        disabled={!carts.cart_items.length}
+        onClick={handleCheckout}
+        className="mt-6 block bg-black text-white text-center py-3 rounded-md hover:bg-gray-800 transition-colors w-full cursor-pointer disabled:cursor-not-allowed disabled:bg-gray-600"
       >
         Go to Checkout
         <span className="inline-block ml-2">→</span>
-      </a>
+      </button>
     </div>
   );
 }

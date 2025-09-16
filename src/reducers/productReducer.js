@@ -9,7 +9,7 @@ export const productReducer = (prevState, action) => {
   switch (action.type) {
     case "SORT": {
       // copy object (not deeply)
-      let result = [...prevState];
+      let result = [...prevState.products];
 
       if (action.sortType === "low-high") {
         for (let i = 0; i < result.length; i++) {
@@ -61,7 +61,11 @@ export const productReducer = (prevState, action) => {
         }
       }
 
-      return result;
+      return {
+        ...prevState,
+        products: result,
+        query: action.query,
+      };
     }
 
     case "SEARCH": {
@@ -76,10 +80,26 @@ export const productReducer = (prevState, action) => {
 
       debounce(searchProduct(action.query), 1000);
 
+      if (!result.length) {
+        return {
+          products: result,
+          error: "Not found!",
+          query: action.query,
+        };
+      }
+
       return {
         ...prevState,
         products: result,
         query: action.query,
+      };
+    }
+
+    case "RESET": {
+      return {
+        products,
+        query: "",
+        error: "",
       };
     }
     default:

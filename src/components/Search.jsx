@@ -11,8 +11,6 @@ function Search() {
       type: "SEARCH",
       query: e.target.value,
     });
-
-    console.log("from s");
   };
   return (
     <div className="relative hidden md:block w-64">
