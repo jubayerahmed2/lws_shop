@@ -1,6 +1,6 @@
 import { checkStock } from "../utils/check_stock";
 
-const cartReducer = (carts, action) => {
+const cartReducer = (state, action) => {
   /*
     -> Actions:
      1. Create new cart item as - {productId, quantity = 0}
@@ -10,72 +10,100 @@ const cartReducer = (carts, action) => {
      5. Clean all item 
     */
 
-  let state = carts.cart_items;
-
   switch (action.type) {
     case "CREATE": {
-      console.log("error");
-
-      const alreadyExist = state.find(
+      const alreadyExist = state.cart_items.find(
         (item) => item.productId === action.payload.id
       );
-      // if (alreadyExist) {
-      //   throw Error("Item already in cart");
-      // }
 
-      return [
+      if (alreadyExist) {
+        return {
+          ...state,
+          cart_items: state.cart_items.filter(
+            (item) => item.productId !== action.payload.id
+          ),
+        };
+      }
+
+      return {
         ...state,
-        {
-          ...action.payload,
-          productId: action.payload.id,
-        },
-      ];
+        cart_items: [
+          ...state.cart_items,
+          {
+            ...action.payload,
+            productId: action.payload.id,
+          },
+        ],
+      };
     }
     case "INC": {
-      const nextCarts = state.map((item) => {
+      const cart = state.cart_items.find(
+        (c) => c.productId === action.payload.id
+      );
+      const hasEnoughStock = checkStock(cart.quantity, action.payload.id);
+
+      if (!hasEnoughStock) {
+        return {
+          ...state,
+          error: "Not enough stock",
+        };
+      }
+
+      const nextCarts = state.cart_items.map((item) => {
         if (item.productId === action.payload.id) {
-          const hasEnoughStock = checkStock(state.quantity, action.payload.id);
-
-          if (!hasEnoughStock) {
-            throw Error("Not enough stock");
-          }
-
           return { ...item, quantity: item.quantity + 1 };
         } else {
           return item;
         }
       });
 
-      return nextCarts;
+      return {
+        ...state,
+        cart_items: nextCarts,
+      };
     }
     case "DEC": {
-      const nextCarts = state.map((item) => {
-        if (item.productId === action.payload.id) {
-          if (item.quantity === 1) {
-            throw Error("Cannot perform this action");
-          }
+      const cart = state.cart_items.find(
+        (c) => c.productId === action.payload.id
+      );
 
+      if (cart.quantity === 1) {
+        return {
+          ...state,
+          error: "Cannot perform this action",
+        };
+      }
+
+      const nextCarts = state.cart_items.map((item) => {
+        if (item.productId === action.payload.id) {
           return { ...item, quantity: item.quantity - 1 };
         } else {
           return item;
         }
       });
 
-      return nextCarts;
+      return {
+        ...state,
+        cart_items: nextCarts,
+      };
     }
     case "DELETE": {
-      const nextCarts = state.filter(
-        (item) => item.productId !== action.payload.id
-      );
-
-      return nextCarts;
+      return {
+        ...state,
+        cart_items: state.cart_items.filter(
+          (item) => item.productId !== action.payload.id
+        ),
+      };
     }
     case "CLEAR": {
       return [];
     }
 
     default:
-      throw Error("Unknown Action: ", action.type);
+      return {
+        ...state,
+        error: `Unknown Action: ${action.type}`,
+      };
   }
 };
 

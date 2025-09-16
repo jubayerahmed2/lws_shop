@@ -1,13 +1,15 @@
-import { useCartDispatch } from "../contexts/CartProvider";
+import { useCart, useCartDispatch } from "../contexts/CartProvider";
 import { calculateDiscount } from "../utils/calculate_discount";
 
 function Product({ product }) {
   const dispatch = useCartDispatch();
+  const carts = useCart();
 
   const { id, name, image, stock, price, rating, discount } = product || {};
   const discountPrice =
     price - calculateDiscount(parseInt(price), parseInt(discount));
 
+  const cart = carts.cart_items.find((item) => item.productId === id);
   return (
     <div className="bg-gray-100 rounded-lg overflow-hidden transition-transform hover:scale-[1.02] duration-300">
       <div className="h-48 bg-gray-200 flex items-center justify-center">
@@ -35,10 +37,9 @@ function Product({ product }) {
             <p className="font-bold">${price} </p>
           )}
         </div>
-        <button className="w-full mt-2 bg-red-800 py-1 text-gray-100 rounded flex items-center justify-center">
-          Remove from Cart
-        </button>
+
         <button
+          disabled={!stock}
           onClick={() => {
             dispatch({
               type: "CREATE",
@@ -48,9 +49,11 @@ function Product({ product }) {
               },
             });
           }}
-          className="disabled:bg-gray-700 disabled:text-gray-400 disabled:cursor-not-allowed w-full mt-2 bg-gray-800 py-1 cursor-pointer text-gray-100 rounded flex items-center justify-center active:translate-y-1 transition-all active:bg-gray-900"
+          className={` ${
+            cart ? "bg-orange-700 text-white  " : "text-gray-100 bg-gray-800"
+          } disabled:bg-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed w-full mt-2  py-1 cursor-pointer  rounded flex items-center justify-center active:translate-y-1 transition-all active:bg-gray-900 `}
         >
-          Add to Cart
+          {cart ? "Remove from Cart" : "Add to Cart"}
         </button>
       </div>
     </div>

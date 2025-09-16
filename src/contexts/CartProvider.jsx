@@ -6,6 +6,7 @@ const CartDispatchContext = createContext(null);
 
 const initialCarts = {
   cart_items: [], // store {productId, quantity}
+  error: "",
 };
 
 export default function CartProvider({ children }) {

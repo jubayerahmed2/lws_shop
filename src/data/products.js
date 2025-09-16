@@ -14,7 +14,7 @@ const products = [
     name: "Polo with Tipping Details",
     image: productImages.image2,
     rating: 5, // 4/5
-    stock: 52,
+    stock: 2,
     price: 90,
     discount: "20",
   },
