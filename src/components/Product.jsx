@@ -5,21 +5,26 @@ function Product({ product }) {
   const dispatch = useCartDispatch();
   const carts = useCart();
 
-  const { id, name, image, stock, price, rating, discount } = product || {};
+  const { id, name, image, stock, price, rating, discount, createdAt } =
+    product || {};
   const discountPrice =
     price - calculateDiscount(parseInt(price), parseInt(discount));
 
   const cart = carts.cart_items.find((item) => item.productId === id);
+
   return (
-    <div className="bg-gray-100 rounded-lg overflow-hidden transition-transform hover:scale-[1.02] duration-300">
-      <div className="h-48 bg-gray-200 flex items-center justify-center">
+    <div className=" bg-gray-100 rounded-lg overflow-hidden transition-transform hover:scale-[1.02] duration-300">
+      <div className="h-48 bg-gray-200 flex items-center justify-center relative">
         <img src={image} alt={name} className="h-full w-auto object-cover" />
+        <span className="absolute bottom-0 right-0 block  text-black px-3 py-1 border-none text-xs">
+          {createdAt.toISOString().slice(0, 10).split("-").join("/")}
+        </span>
       </div>
       <div className="p-4">
         <h3 className="font-medium">{name} </h3>
         <div className="flex items-center justify-between">
           <div className="flex items-center my-1">
-            <div className="flex text-yellow-400">{ratings(rating)}</div>
+            <Ratings rating={rating} />
             <span className="text-xs text-gray-500 ml-1">{rating}/5</span>
           </div>
           <span className="text-xs text-gray-700">({stock} pcs left)</span>
@@ -61,21 +66,18 @@ function Product({ product }) {
 }
 export default Product;
 
-const ratings = ({ rating }) => {
-  const result = [];
-
-  let maxRating = 5;
-  for (let r = 0; r < maxRating; r++) {
-    if (r < rating) {
-      result.push(<span key={r}>★</span>);
-    } else {
-      result.push(
-        <span className="text-gray-300" key={r}>
-          ★
-        </span>
-      );
-    }
-  }
-
-  return result;
+const Ratings = ({ rating }) => {
+  return (
+    <div className="flex text-yellow-400">
+      {[1, 2, 3, 4, 5].map((r) => {
+        return r <= rating ? (
+          <span key={r}>★</span>
+        ) : (
+          <span className="text-gray-300" key={r}>
+            ★
+          </span>
+        );
+      })}
+    </div>
+  );
 };
