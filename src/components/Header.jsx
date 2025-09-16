@@ -1,4 +1,4 @@
-import AccountIcon from "../icons/AccountIcon";
+import AccountIcon from "../assets/icons/AccountIcon";
 import CartButton from "./CartButton";
 import Search from "./Search";
 

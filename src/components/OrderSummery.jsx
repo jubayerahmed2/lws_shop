@@ -1,4 +1,4 @@
-import CouponIcon from "../icons/CouponIcon";
+import CouponIcon from "../assets/icons/CouponIcon";
 
 function OrderSummery() {
   return (

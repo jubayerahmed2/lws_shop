@@ -1,4 +1,4 @@
-import SearchIcon from "../icons/SearchIcon";
+import SearchIcon from "../assets/icons/SearchIcon";
 import Input from "./Input";
 
 function Search() {

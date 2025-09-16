@@ -1,4 +1,4 @@
-import CartIcon from "../icons/CartIcon";
+import CartIcon from "../assets/icons/CartIcon";
 
 function CartButton() {
   return (

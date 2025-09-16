@@ -1,7 +1,9 @@
+import { useProduct } from "../contexts/ProductProvider";
 import Product from "./Product";
 import SortProducts from "./SortProducts";
 
 function Products() {
+  const products = useProduct();
   return (
     <div className="lg:col-span-2">
       <div className="flex items-center justify-between mb-6">
@@ -9,9 +11,9 @@ function Products() {
         <SortProducts />
       </div>
       <div className="product-grid">
-        <Product />
-        <Product />
-        <Product />
+        {products.map((product) => (
+          <Product key={product.id} product={product} />
+        ))}
       </div>
     </div>
   );
