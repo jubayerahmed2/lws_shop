@@ -1,11 +1,17 @@
 import { useCartDispatch } from "../contexts/CartProvider";
-import products from "../data/products";
+import { useProduct } from "../contexts/ProductProvider";
+import { calculateDiscount } from "../utils/calculate_discount";
 
 function CartItem({ productId, quantity }) {
   const dispatch = useCartDispatch();
+  const products = useProduct();
   const productInfo = products.find((p) => p.id === productId);
 
-  const { id, image, name, price } = productInfo || {};
+  const { id, image, name, price, discount } = productInfo || {};
+
+  const discountPrice =
+    price - calculateDiscount(parseInt(price), parseInt(discount));
+
   return (
     <div className="flex items-start space-x-4 pb-4 border-b border-gray-200 mb-4">
       <div className="w-16 h-16 bg-gray-100 rounded flex-shrink-0 flex items-center justify-center">
@@ -29,7 +35,7 @@ function CartItem({ productId, quantity }) {
           </button>
         </div>
         <div className="flex justify-between items-center mt-2">
-          <p className="font-bold">${price}</p>
+          <p className="font-bold">${discountPrice}</p>
           <div className="flex items-center space-x-2">
             <button
               onClick={() => {
