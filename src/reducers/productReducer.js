@@ -72,7 +72,7 @@ export const productReducer = (prevState, action) => {
       let result = products;
       const searchProduct = (query) => {
         const res = products.filter((product) => {
-          return product.name.includes(query);
+          return product.name.toLowerCase().includes(query.toLowerCase());
         });
 
         result = res;
